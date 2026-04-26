@@ -6,17 +6,17 @@
 
 在VScode里安装这几个插件
 
-![](C:\Users\王占东\AppData\Roaming\marktext\images\2025-03-12-00-58-05-image.png)![](C:\Users\王占东\AppData\Roaming\marktext\images\2025-03-12-00-59-30-image.png)
+![](assets\2025-03-12-00-58-05-image.png)![](assets\2025-03-12-00-59-30-image.png)
 
 ## 二、设置插件
 
 安装好Embedded IDE插件后，VScode左侧应该会有这个图标，这个图标名称是EIDE，就是Embedded IDE的缩写
 
-![](C:\Users\王占东\AppData\Roaming\marktext\images\2025-03-12-01-01-32-image.png)
+![](assets\2025-03-12-01-01-32-image.png)
 
 点开后是这样的
 
-![](C:\Users\王占东\AppData\Roaming\marktext\images\2025-03-12-01-02-46-image.png)
+![](assets\2025-03-12-01-02-46-image.png)
 
 点击设置工具链，
 
@@ -46,7 +46,7 @@
 
 然后VScode会提示你下面这个东西。要注意：EIDE项目路径就是VScode的工作区目录。所以如果要在VScode里用agent，最好直接选yes。
 
-![](assets\2025-03-12-01-09-36-image.png)
+![](assets/2025-03-12-01-09-36-image.png)
 
 EIDE项目中包含如下文件：
 
