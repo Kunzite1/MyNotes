@@ -75,21 +75,21 @@ target_include_directories(demo PRIVATE include)
 
 进入VScode的设置，搜索"Cmake:Use C Make Presets"，调成never。
 
-![](image/2025-12-13-17-26-23-image.png)
+![](assets/2025-12-13-17-26-23-image.png)
 
 回到，main.cpp，按下crtl+shift+P，选择“CMAKE：选择工具包”，
 
-![](image/2025-12-13-17-21-21-image.png)
+![](assets/2025-12-13-17-21-21-image.png)
 
 然后选择自己安装的gcc
 
-![](image/2025-12-13-17-22-04-image.png)
+![](assets/2025-12-13-17-22-04-image.png)
 
 然后VScode会生成build文件，同时按照cmakelists文件在项目路径中生成main.exe。
 
 项目结构应该是这样的（以我的项目举例）：
 
-![](image/2025-12-06-23-14-19-image.png)
+![](assets/2025-12-06-23-14-19-image.png)
 
 ---
 
@@ -97,8 +97,8 @@ target_include_directories(demo PRIVATE include)
 
 生成、调试、运行按键：
 
-![](image/2025-12-06-23-15-25-image.png)
+![](assets/2025-12-06-23-15-25-image.png)
 
-点击VScode底部栏的build生成按键，如果像下面这样，说明没问题了。![](image/2025-12-06-23-15-42-image.png)
+点击VScode底部栏的build生成按键，如果像下面这样，说明没问题了。![](assets/2025-12-06-23-15-42-image.png)
 
 点击三角形的运行按键，程序会在VScode的终端中运行。虫子按钮是调试，自行探索。
