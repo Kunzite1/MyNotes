@@ -2,7 +2,7 @@
 
 ## 一、创建线程
 
-1. 首先定义线程（如下图），其实是一个结构体指针![](C:\Users\王占东\AppData\Roaming\marktext\images\2025-01-21-22-42-41-image.png)，指向rt_thread结构体。
+1. 首先定义线程（如下图），其实是一个结构体指针![](../assets/2025-01-21-22-42-41-image.png)，指向rt_thread结构体。
 
 ```c
 rt_thread_t top;
@@ -55,7 +55,7 @@ void thread1_entry(void *p)
 
 在rtconfig.h里可以看到最多能设置几个优先级，优先级数字越低，优先级越高
 
-![](C:\Users\王占东\AppData\Roaming\marktext\images\2025-01-21-22-43-50-image.png)  
+![](../assets/2025-01-21-22-43-50-image.png)  
 
 比如示例工程中的线程top优先级为14，thread1~4优先级为1。
 

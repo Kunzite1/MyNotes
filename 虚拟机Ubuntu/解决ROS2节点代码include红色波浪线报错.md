@@ -1,6 +1,6 @@
 # 解决VSCode编写ROS2代码时include报错
 
-![](../image/2026-04-10-12-14-27-image.png)
+![](../assets/2026-04-10-12-14-27-image.png)
 
 如图，即使`colcon build`能正常编译，`ros2 run`也能正常运行节点，但VScode里还是有红色波浪线。
 

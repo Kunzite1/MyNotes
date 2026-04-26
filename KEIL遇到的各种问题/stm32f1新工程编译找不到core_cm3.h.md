@@ -4,7 +4,7 @@
 
 新建工程编译，报错如图：
 
-![](C:\Users\王占东\AppData\Roaming\marktext\images\2025-04-28-17-46-00-image.png)
+![](../assets/2025-04-28-17-46-00-image.png)
 
 ```c
 C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include\stm32f10x.h(483): 

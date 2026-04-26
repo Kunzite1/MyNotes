@@ -20,7 +20,7 @@
 
 在C盘里创建一个文件夹[UserData]，在[UserData]里创建文件夹[AppData]，然后在[AppData]里创建文件夹[Local]，再在[Local]里创建文件夹[Temp]，复制[Temp]文件夹的路径。
 
-![](C:\Users\王占东\AppData\Roaming\marktext\images\2025-03-06-15-02-20-image.png)
+![](../assets/2025-03-06-15-02-20-image.png)
 
 电脑设置-搜索“高级系统设置”-高级-环境变量-修改TEMP和TMP的环境变量，改为刚刚复制的[Temp]的路径。修改后如下图。
 

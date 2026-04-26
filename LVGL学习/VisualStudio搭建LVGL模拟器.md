@@ -4,11 +4,11 @@
 
 1、勾选.NET和C++桌面开发
 
-![](C:\Users\王占东\AppData\Roaming\marktext\images\2025-03-03-19-55-00-image.png)
+![](../assets/2025-03-03-19-55-00-image.png)
 
 2、在Visual Studio安装器的“单个组件”栏勾选“MSVC v143......”，如图
 
-![](C:\Users\王占东\AppData\Roaming\marktext\images\2025-03-03-19-56-25-image.png)
+![](../assets/2025-03-03-19-56-25-image.png)
 
 然后安装即可。
 
@@ -22,19 +22,19 @@ https://github.com/lvgl/lv_port_pc_visual_studio/tree/release/v8.3
 
 版本选择v8.3
 
-![](C:\Users\王占东\AppData\Roaming\marktext\images\2025-03-03-19-59-36-image.png)
+![](../assets/2025-03-03-19-59-36-image.png)
 
 先在右上方code选项中下载整个仿真工程的压缩包，然后点进LVGL.Simulator
 
-![](C:\Users\王占东\AppData\Roaming\marktext\images\2025-03-03-20-00-35-image.png)
+![](../assets/2025-03-03-20-00-35-image.png)
 
 依次点击这三个文件夹（辅助文件），并下载他们的压缩包。
 
-![](C:\Users\王占东\AppData\Roaming\marktext\images\2025-03-03-20-00-53-image.png)
+![](../assets/2025-03-03-20-00-53-image.png)
 
 然后把仿真工程压缩包解压，再把三个辅助文件压缩包解压后，放进对应的路径。如图
 
-![](C:\Users\王占东\AppData\Roaming\marktext\images\2025-03-03-20-02-59-image.png)
+![](../assets/2025-03-03-20-02-59-image.png)
 
 ---
 
@@ -44,7 +44,7 @@ https://github.com/lvgl/lv_port_pc_visual_studio/tree/release/v8.3
 
 然后点击这个.cpp文件
 
-![](C:\Users\王占东\AppData\Roaming\marktext\images\2025-03-03-20-05-05-image.png)
+![](../assets/2025-03-03-20-05-05-image.png)
 
 在main函数里有大量的被注释掉的代码，这些是示例，可以选其中一个取消注释，运行一下。
 
@@ -90,7 +90,7 @@ void learn_start()
 
 打开LVGL.Simulator.cpp，包含头文件`#include "lvgl/demos/PetRobotLVGL/myapp.h"`，在main函数里调用`myapp_start();`，如图：
 
-![](../image/2025-11-21-01-48-34-{6859C29F-73E3-46CA-A36C-044F88345F3E}.png)
+![](../assets/2025-11-21-01-48-34-{6859C29F-73E3-46CA-A36C-044F88345F3E}.png)
 
 ctrl+F5运行即可（注意：注释main函数的所有例程）。
 
