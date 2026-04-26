@@ -14,7 +14,7 @@
 
 Cortex-M处理器启动时默认处于特权访问等级，此时可以访问处理器中的所有资源。通过软件可以切换到非特权访问等级。只有异常请求（中断）可以从非特权访问等级转换到特权访问等级。
 
-![](image/2026-03-23-18-05-27-image.png)
+![](assets/2026-03-23-18-05-27-image.png)
 
 #### 线程模式：
 
@@ -34,7 +34,7 @@ Cortex-M处理器启动时默认处于特权访问等级，此时可以访问处
 
 #### Cortex-M3/M4中的寄存器
 
-<img src="image/2026-03-23-18-10-28-image.png" title="" alt="" data-align="center">
+<img src="assets/2026-03-23-18-10-28-image.png" title="" alt="" data-align="center">
 
 - R0到R12通用目的寄存器，其中R0到R7低寄存器。许多16位指令只能访问低寄存器，高寄存器可用于32位指令。R0-R12初始值是未定义的。
 
@@ -50,7 +50,7 @@ Cortex-M处理器启动时默认处于特权访问等级，此时可以访问处
 
 #### 程序状态寄存器
 
-<img src="image/2026-03-26-12-10-30-image.png" title="" alt="" data-align="center">
+<img src="assets/2026-03-26-12-10-30-image.png" title="" alt="" data-align="center">
 
 - 特殊寄存器未经过存储器映射，使用MRS和MSR指令来访问。如：
 

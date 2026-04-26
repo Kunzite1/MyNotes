@@ -20,11 +20,11 @@
 
 点击设置工具链，
 
-![](C:\Users\王占东\AppData\Roaming\marktext\images\2025-03-12-01-03-29-image.png)
+![](assets\2025-03-12-01-03-29-image.png)
 
 这两个就是C51和MDK，先点击其中一个，弹出文件选择窗口。找到KEIL安装路径，下面会有一个TOOLS.INI，选择它
 
-![](C:\Users\王占东\AppData\Roaming\marktext\images\2025-03-12-01-04-51-image.png)
+![](assets\2025-03-12-01-04-51-image.png)
 
 这样就设置好工具链了。然后就是导入工程的事情
 
@@ -34,33 +34,33 @@
 
 打开EIDE的窗口，在下面有个OPERATIONS
 
-![](C:\Users\王占东\AppData\Roaming\marktext\images\2025-03-12-01-06-17-image.png)
+![](assets\2025-03-12-01-06-17-image.png)
 
 点击导入项目，然后VScode上方会让你选择MDK或者其他之类的东西。
 
-![](C:\Users\王占东\AppData\Roaming\marktext\images\2025-03-12-01-07-12-image.png)
+![](assets\2025-03-12-01-07-12-image.png)
 
 用MDK举例，点击MDK后，找到你要打开的KEIL工程的.uvproj文件，比如这个
 
-![](C:\Users\王占东\AppData\Roaming\marktext\images\2025-03-12-01-08-40-image.png)
+![](assets\2025-03-12-01-08-40-image.png)
 
 然后VScode会提示你下面这个东西。要注意：EIDE项目路径就是VScode的工作区目录。所以如果要在VScode里用agent，最好直接选yes。
 
-![](C:\Users\王占东\AppData\Roaming\marktext\images\2025-03-12-01-09-36-image.png)
+![](assets\2025-03-12-01-09-36-image.png)
 
 EIDE项目中包含如下文件：
 
-![](image/2026-02-18-23-45-34-image.png)
+![](assets/2026-02-18-23-45-34-image.png)
 
 这时，EIDE界面就有你的工程了
 
-![](C:\Users\王占东\AppData\Roaming\marktext\images\2025-03-12-01-10-19-image.png)
+![](assets\2025-03-12-01-10-19-image.png)
 
 ### 2、打开项目
 
 点击EIDE界面的打开项目，然后选择你要打开的项目的.code-workspace文件。类似下面这种。
 
-![](C:\Users\王占东\AppData\Roaming\marktext\images\2025-03-12-01-11-54-image.png)
+![](assets\2025-03-12-01-11-54-image.png)
 
 注意：已经导入过VScode的工程，VScode会自动在此工程路径下生成一些文件，这时，才能通过“打开项目”来打开此项目
 
@@ -68,7 +68,7 @@ EIDE项目中包含如下文件：
 
 如图。在EIDE界面中，点击包含目录的加号，并选择文件夹，就可以添加头文件了
 
-![](C:\Users\王占东\AppData\Roaming\marktext\images\2025-03-12-01-14-53-image.png)
+![](assets\2025-03-12-01-14-53-image.png)
 
 ## 四、经验总结
 
@@ -82,7 +82,7 @@ EIDE项目中包含如下文件：
 
 ### 3、使用STLink烧录时找不到hex文件
 
-![](C:\Users\王占东\AppData\Roaming\marktext\images\2025-05-15-01-00-31-{67932535-F115-4C04-B927-C4A84B801030}.png)
+![](assets\2025-05-15-01-00-31-{67932535-F115-4C04-B927-C4A84B801030}.png)
 
 点击构建配置 - 构建器选项 - 铅笔，在链接器中把”不生成HEX文件“关闭，点击保存即可。
 
@@ -102,6 +102,6 @@ EIDE项目中包含如下文件：
 
 然后在VScode里改好编译器路径。
 
-在KEIL中里添加AC5编译器，点![](image/2026-01-23-17-02-42-{4083A3EE-53C0-4E10-BC25-A2844688C8CE}.png)这个按钮，选择Folders/Extensions，![](image/2026-01-23-17-03-44-{AF2C014B-9E43-4AEC-A01A-56B9156723C0}.png)
+在KEIL中里添加AC5编译器，点![](assets/2026-01-23-17-02-42-{4083A3EE-53C0-4E10-BC25-A2844688C8CE}.png)这个按钮，选择Folders/Extensions，![](assets/2026-01-23-17-03-44-{AF2C014B-9E43-4AEC-A01A-56B9156723C0}.png)
 
 点右边三个点按钮，添加ARMCC文件夹，完成。
