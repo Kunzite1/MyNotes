@@ -125,6 +125,75 @@ idf.py -p PORT monitor
 
 ---
 
+## WSL2虚拟机挂载串口设备
+
+以管理员运行powershell，运行以下命令安装 usbipd：
+
+```shell
+winget install usbipd
+```
+
+打开WSL2终端，安装 usbip 客户端以及硬件数据库：
+
+```shell
+sudo apt update
+sudo apt install linux-tools-virtual hwdata -y
+sudo update-alternatives --install /usr/local/bin/usbip usbip $(command -v ls /usr/lib/linux-tools/*/usbip | tail -n1) 20
+```
+
+然后插入USB设备，在PowerShell中运行以下命令列出所有USB设备：
+
+```shell
+usbipd list
+```
+
+输出中会显示类似以下的内容：
+
+```shell
+BUSID  VID:PID    DEVICE                                                        STATE
+1-4    10c4:ea60  Silicon Labs CP210x USB to UART Bridge (COM3)                 Not shared
+```
+
+记住BUSID。然后绑定设备：
+
+```shell
+usbipd bind --busid 1-4
+```
+
+挂载设备到 WSL：
+
+```shell
+usbipd attach --wsl --busid 1-4
+```
+
+在WSL2终端查看USB设备列表：
+
+```shell
+lsusb
+```
+
+输出一般是这样：
+
+```shell
+Bus 001 Device 002: ID 10c4:ea60 Silicon Labs CP210x USB to UART Bridge
+```
+
+USB 串口设备在 Linux 中一般会被识别为 /dev/ttyUSB*（如 USB-TTL 模块）或 /dev/ttyACM*。可以通过以下命令查看：
+
+```shell
+ls /dev/ttyUSB*
+# 或者
+ls /dev/ttyACM*
+```
+
+烧录示例：
+
+```shell
+idf.py -p /dev/ttyACM* flash monitor
+```
+
+---
+
 ## 内容参考
 
 [在 Linux 上安装 ESP-IDF 及工具链 - ESP32-S3 - — ESP-IDF 编程指南 v6.0.1 文档](https://docs.espressif.com/projects/esp-idf/zh_CN/v6.0.1/esp32s3/get-started/linux-setup.html#)
