@@ -186,6 +186,12 @@ ls /dev/ttyUSB*
 ls /dev/ttyACM*
 ```
 
+升级端口权限：
+
+```shell
+sudo chmod 777 /dev/ttyACM*
+```
+
 烧录示例：
 
 ```shell
