@@ -125,6 +125,23 @@ idf.py -p PORT monitor
 
 ---
 
+## 保存idf.py monitor的日志
+
+以hello_world举例：
+
+```shell
+cd ~/esp/hello_world # 首先进入项目目录
+get_idf_522 # 刚刚设置的alias别名，激活idf环境
+# 把终端日志保存到当前目录下的 esp32_run.log
+script -f -c "$IDF_PYTHON_ENV_PATH/bin/python $IDF_PATH/tools/idf.py monitor" esp32_run.log
+```
+
+运行一段时间后，按 ctrl+] 退出monitor，终端显示`Script done.`，表示记录完成。这时可以去`esp32_run.log`查看日志了。
+
+<mark>注意：这个方法，每次记录时，会直接覆盖`esp32_run.log`中的内容。</mark>
+
+---
+
 ## WSL2虚拟机挂载串口设备
 
 以管理员运行powershell，运行以下命令安装 usbipd：
@@ -195,7 +212,7 @@ sudo chmod 777 /dev/ttyACM*
 烧录示例：
 
 ```shell
-idf.py -p /dev/ttyACM* flash monitor
+idf.py -p /dev/ttyACM0 flash monitor
 ```
 
 ---
