@@ -1,0 +1,69 @@
+# ========================================
+# 构建输出
+# ========================================
+/build/
+/bin/
+/obj/
+/out/
+/Objects/
+/Listings/
+/DebugConfig/
+
+# 编译与链接中间文件
+*.o
+*.obj
+*.d
+*.dep
+*.crf
+*.lnp
+*.map
+*.map.old
+*.map.view
+*.lst
+*.i
+*.sct
+*.objlist
+
+# 固件及可执行产物
+*.axf
+*.elf
+*.hex
+*.bin
+*.s19
+*.htm
+*.html
+
+# ========================================
+# Keil MDK 用户文件
+# 保留 *.uvprojx（工程配置）
+# ========================================
+*.uvguix.*
+*.uvoptx
+*.uvgui.*
+*.uvgui
+*.build_log.htm
+*.scvd.user
+
+# ========================================
+# EIDE / VS Code 本地状态
+# 保留 .eide/*.yml 和可共享的 VS Code 配置
+# ========================================
+/.eide/log/
+/.eide.usr.ctx.json
+/.vscode/launch.json
+/.settings/
+*.ept
+*.eide-template
+
+# ========================================
+# 编辑器、系统及临时文件
+# ========================================
+*.bak
+*.tmp
+*.log
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+Desktop.ini
