@@ -683,52 +683,52 @@ static void prvAddNewTaskToReadyList( TCB_t *pxNewTCB ) PRIVILEGED_FUNCTION;
 	TCB_t *pxNewTCB;
 	BaseType_t xReturn;
 
-		/* If the stack grows down then allocate the stack then the TCB so the stack
-		does not grow into the TCB.  Likewise if the stack grows up then allocate
-		the TCB then the stack. */
-		#if( portSTACK_GROWTH > 0 )
+		/* 如果栈向下增长，则先分配栈再分配TCB，这样栈就不会向下增长到TCB中。
+		同样地，如果栈向上增长，则先分配TCB再分配栈。 */
+		#if( portSTACK_GROWTH > 0 ) /* 栈地址向上增长 */
 		{
-			/* Allocate space for the TCB.  Where the memory comes from depends on
-			the implementation of the port malloc function and whether or not static
-			allocation is being used. */
+			/* 给TCB分配内存空间，具体从哪里拿内存，
+			要看移植层里malloc函数是怎么实现的，
+			以及是不是用了静态分配方式。 */
 			pxNewTCB = ( TCB_t * ) pvPortMalloc( sizeof( TCB_t ) );
 
-			if( pxNewTCB != NULL )
+			if( pxNewTCB != NULL )	/* 确保TCB的内存分配成功 */
 			{
-				/* Allocate space for the stack used by the task being created.
-				The base of the stack memory stored in the TCB so the task can
-				be deleted later if required. */
-				pxNewTCB->pxStack = ( StackType_t * ) pvPortMalloc( ( ( ( size_t ) usStackDepth ) * sizeof( StackType_t ) ) ); /*lint !e961 MISRA exception as the casts are only redundant for some ports. */
+				/* 为正在创建的任务分配栈空间。栈内存的基地址存储在任务控制块（TCB）中，
+				以便以后如果需要可以删除该任务。 */
+				pxNewTCB->pxStack = ( StackType_t * ) pvPortMalloc( ( ( ( size_t ) usStackDepth ) * sizeof( StackType_t ) ) ); 
+				/*lint !e961 MISRA exception as the casts are only redundant for some ports. */
 
 				if( pxNewTCB->pxStack == NULL )
 				{
-					/* Could not allocate the stack.  Delete the allocated TCB. */
+					/* 分配栈空间失败，删除TCB */
 					vPortFree( pxNewTCB );
 					pxNewTCB = NULL;
 				}
 			}
 		}
-		#else /* portSTACK_GROWTH */
+		#else /* portSTACK_GROWTH 栈向下增长 */
 		{
 		StackType_t *pxStack;
 
+			/* 分配栈空间 */
 			/* Allocate space for the stack used by the task being created. */
 			pxStack = ( StackType_t * ) pvPortMalloc( ( ( ( size_t ) usStackDepth ) * sizeof( StackType_t ) ) ); /*lint !e961 MISRA exception as the casts are only redundant for some ports. */
 
 			if( pxStack != NULL )
 			{
+				/* 分配TCB的空间 */
 				/* Allocate space for the TCB. */
 				pxNewTCB = ( TCB_t * ) pvPortMalloc( sizeof( TCB_t ) ); /*lint !e961 MISRA exception as the casts are only redundant for some paths. */
 
 				if( pxNewTCB != NULL )
 				{
 					/* Store the stack location in the TCB. */
-					pxNewTCB->pxStack = pxStack;
+					pxNewTCB->pxStack = pxStack;	// 赋值指针，指向栈空间的起始内存
 				}
 				else
 				{
-					/* The stack cannot be used as the TCB was not created.  Free
-					it again. */
+					/* The stack cannot be used as the TCB was not created.  Free it again. */
 					vPortFree( pxStack );
 				}
 			}
@@ -802,6 +802,7 @@ UBaseType_t x;
 	grows from high memory to low (as per the 80x86) or vice versa.
 	portSTACK_GROWTH is used to make the result positive or negative as required
 	by the port. */
+	/* 根据栈地址增长方向计算栈顶地址 */
 	#if( portSTACK_GROWTH < 0 )
 	{
 		pxTopOfStack = pxNewTCB->pxStack + ( ulStackDepth - ( uint32_t ) 1 );
@@ -824,6 +825,7 @@ UBaseType_t x;
 	#endif /* portSTACK_GROWTH */
 
 	/* Store the task name in the TCB. */
+	/* 将任务名传入TCB */
 	for( x = ( UBaseType_t ) 0; x < ( UBaseType_t ) configMAX_TASK_NAME_LEN; x++ )
 	{
 		pxNewTCB->pcTaskName[ x ] = pcName[ x ];
@@ -831,6 +833,7 @@ UBaseType_t x;
 		/* Don't copy all configMAX_TASK_NAME_LEN if the string is shorter than
 		configMAX_TASK_NAME_LEN characters just in case the memory after the
 		string is not accessible (extremely unlikely). */
+		/* 如果任务名长度小于configMAX_TASK_NAME_LEN，则无需浪费时间拷贝空内容 */
 		if( pcName[ x ] == 0x00 )
 		{
 			break;
@@ -843,6 +846,7 @@ UBaseType_t x;
 
 	/* Ensure the name string is terminated in the case that the string length
 	was greater or equal to configMAX_TASK_NAME_LEN. */
+	/* 确保在字符串长度大于或等于configMAX_TASK_NAME_LEN的情况下，名称字符串以空字符结尾。 */
 	pxNewTCB->pcTaskName[ configMAX_TASK_NAME_LEN - 1 ] = '\0';
 
 	/* This is used as an array index so must ensure it's not too large.  First
