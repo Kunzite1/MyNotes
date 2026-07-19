@@ -256,6 +256,7 @@ count overflows. */
  * Place the task represented by pxTCB into the appropriate ready list for
  * the task.  It is inserted at the end of the list.
  */
+/* 将任务添加到适当的就绪列表中 */
 #define prvAddTaskToReadyList( pxTCB )																\
 	traceMOVED_TASK_TO_READY_STATE( pxTCB );														\
 	taskRECORD_READY_PRIORITY( ( pxTCB )->uxPriority );												\
@@ -849,8 +850,7 @@ UBaseType_t x;
 	/* 确保在字符串长度大于或等于configMAX_TASK_NAME_LEN的情况下，名称字符串以空字符结尾。 */
 	pxNewTCB->pcTaskName[ configMAX_TASK_NAME_LEN - 1 ] = '\0';
 
-	/* This is used as an array index so must ensure it's not too large.  First
-	remove the privilege bit if one is present. */
+	/* This is used as an array index so must ensure it's not too large. */
 	if( uxPriority >= ( UBaseType_t ) configMAX_PRIORITIES )
 	{
 		uxPriority = ( UBaseType_t ) configMAX_PRIORITIES - ( UBaseType_t ) 1U;
@@ -941,6 +941,7 @@ UBaseType_t x;
 	but had been interrupted by the scheduler.  The return address is set
 	to the start of the task function. Once the stack has been initialised
 	the	top of stack variable is updated. */
+	/* 初始化任务栈，使任务看起来像已经在运行中，只是被中断了 */
 	#if( portUSING_MPU_WRAPPERS == 1 )
 	{
 		pxNewTCB->pxTopOfStack = pxPortInitialiseStack( pxTopOfStack, pxTaskCode, pvParameters, xRunPrivileged );
@@ -975,13 +976,15 @@ static void prvAddNewTaskToReadyList( TCB_t *pxNewTCB )
 		{
 			/* There are no other tasks, or all the other tasks are in
 			the suspended state - make this the current task. */
+			/* 这是第一个任务，需要初始化任务列表 */
 			pxCurrentTCB = pxNewTCB;
 
-			if( uxCurrentNumberOfTasks == ( UBaseType_t ) 1 )
+			if( uxCurrentNumberOfTasks == ( UBaseType_t ) 1 )	/* 这是第一个任务，需要初始化任务列表 */
 			{
 				/* This is the first task to be created so do the preliminary
 				initialisation required.  We will not recover if this call
 				fails, but we will report the failure. */
+				/* 初始化任务链表 */
 				prvInitialiseTaskLists();
 			}
 			else
@@ -994,6 +997,7 @@ static void prvAddNewTaskToReadyList( TCB_t *pxNewTCB )
 			/* If the scheduler is not already running, make this task the
 			current task if it is the highest priority task to be created
 			so far. */
+			/* 如果调度器未运行，且新任务的优先级高于当前任务的优先级，则将新任务设置为当前任务 */
 			if( xSchedulerRunning == pdFALSE )
 			{
 				if( pxCurrentTCB->uxPriority <= pxNewTCB->uxPriority )
@@ -3338,6 +3342,7 @@ static void prvInitialiseTaskLists( void )
 {
 UBaseType_t uxPriority;
 
+	/* 初始化每个优先级的所有任务列表 */
 	for( uxPriority = ( UBaseType_t ) 0U; uxPriority < ( UBaseType_t ) configMAX_PRIORITIES; uxPriority++ )
 	{
 		vListInitialise( &( pxReadyTasksLists[ uxPriority ] ) );
@@ -3349,19 +3354,23 @@ UBaseType_t uxPriority;
 
 	#if ( INCLUDE_vTaskDelete == 1 )
 	{
+		/* 初始化等待终止的任务列表 */
 		vListInitialise( &xTasksWaitingTermination );
 	}
 	#endif /* INCLUDE_vTaskDelete */
 
 	#if ( INCLUDE_vTaskSuspend == 1 )
 	{
+		/* 初始化挂起任务列表 */
 		vListInitialise( &xSuspendedTaskList );
 	}
 	#endif /* INCLUDE_vTaskSuspend */
 
 	/* Start with pxDelayedTaskList using list1 and the pxOverflowDelayedTaskList
 	using list2. */
+	/* 初始化延迟任务列表为延迟任务列表1 */
 	pxDelayedTaskList = &xDelayedTaskList1;
+	/* 初始化溢出延迟任务列表为延迟任务列表2 */
 	pxOverflowDelayedTaskList = &xDelayedTaskList2;
 }
 /*-----------------------------------------------------------*/
