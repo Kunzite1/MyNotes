@@ -32,8 +32,20 @@ git checkout -b office-work
 git pull origin main
 ```
 
-### 2-2 创建分支
+### 2-2 在公司电脑提交和推送
 
-### 2-3 完成后在公司电脑提交和推送和合并
+用`VScode`或`github desktop`进行`commit`，并推送新分支
 
-用VScode或github desktop进行commit
+```powershell
+git add .
+git commit -m "update: office notes"
+git push -u origin office-work
+```
+
+### 2-3 在个人电脑上
+
+在github网页端进行`pull request`，然后进行`merge`。
+
+然后可以用`VScode`或`github desktop`进行`fetch`和`pull origin`，更新为最新状态。
+
+---
