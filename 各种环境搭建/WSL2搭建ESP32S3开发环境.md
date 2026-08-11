@@ -97,7 +97,7 @@ idf.py menuconfig
 
 正确操作上述步骤后，系统将显示以下菜单：
 
-![](assets/project-configuration.png)
+![](../assets/project-configuration.png)
 
 可以通过此菜单设置项目的具体变量，包括 Wi-Fi 网络名称、密码和处理器速度等。`hello_world` 示例项目会以默认配置运行，因此在这一项目中，可以跳过使用 `menuconfig` 进行项目配置这一步骤。
 
