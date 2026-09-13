@@ -32,7 +32,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | `rebuild` | 清理后重新编译 |
 | `clean` | 仅清理 |
 
-烧录使用 **STLink / SWD**（见 `.eide/eide.yml` 中 `uploader: STLink`）。
+烧录使用 **STLink / SWD**（见 `.eide/eide.yml` 中 `uploader: STLink`）。VS Code 调试走 `debugger: cortex-debug`（cortex-debug 扩展 + SWD）。构建产物输出到 `C8T6工程-写注释/build/`（`outDir: build`），已被 `.gitignore` 忽略，可随时删除重建。
 
 ### Keil MDK
 
@@ -54,10 +54,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | `Start/` | CMSIS 内核支持 + `system_stm32f10x.c`；启动文件用 `startup_stm32f10x_md.s`（C8T6 实际是 MD 容量，但代码按 HD 类编译，需要注意 `STM32F10X_HD` 与实际芯片容量不匹配——若改了外设假设要回到这里核对） |
 | `Library/` | STM32 标准外设库，未使用到的外设仍保留在编译列表里；新增依赖时核对 `User/stm32f10x_conf.h` 是否打开对应模块 |
 | `FreeRTOS/` | V9.0.0 内核源码；**只编译** `croutine.c` / `event_groups.c` / `list.c` / `queue.c` / `tasks.c` / `timers.c`（见 `.eide/eide.yml` 的 `FreeRTOS_core`）。其中 `croutine.c` 和 `timers.c` 受 `configUSE_CO_ROUTINES` / `configUSE_TIMERS` 开关控制 |
-| `FreeRTOS/portable/RVDS/ARM_CM3/` | 移植层：`port.c`（上下文切换/PendSV/SysTick）+ `portmacro.h`（基础类型定义） |
+| `FreeRTOS/portable/RVDS/ARM_CM3/` | 移植层：`port.c`（上下文切换/PendSV/SysTick）+ `portmacro.h`（基础类型定义）。**注意**：`portable/Keil/` 下只有一个指向 RVDS 的提示文件（`See-also-the-RVDS-directory.txt`），Keil 工程同样引用本目录的 `port.c` 和 `heap_4.c`（见 `Project.uvprojx`） |
 | `FreeRTOS/portable/MemMang/` | 内存分配算法；工程只链入 `heap_4.c`，其他实现保留供切换对照 |
 | `Public/` | 通用基础：`SysTick.c`（72 MHz 计时，`delay_ms/us`）、`usart.c`（USART1 重定向 printf）、`system.h`（位带别名宏 `PAout/PAin` 等） |
-| `Applications/` | 应用层：`led.c`（PA11/PA12）、`KEY/key.c`（PB 口三按键扫描） |
+| `Applications/` | 应用层：`led.c`（PA11/PA12）、`KEY/key.c`（PB 口三按键扫描）。**注意**：EIDE 编译列表（`.eide/eide.yml`）只包含 `led.c`，`KEY/key.c` 不会被 EIDE 构建——改按键代码后在 EIDE 下不会生效，需核对是否加入编译或改用 Keil（`Project.uvprojx` 编译的是 `Applications/key.c`） |
 | `User/` | `main.c`（入口：创建 `start_task` 后 `vTaskStartScheduler()`，在 `start_task` 中再创建 `led1_task` 并删除自己）+ `stm32f10x_it.c`（中断向量，挂接 `PendSV_Handler` / `SVC_Handler` / `SysTick_Handler`） |
 | `.cmsis/include/` | CMSIS 头文件；新增 CMSIS 依赖时检查此目录 |
 

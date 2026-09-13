@@ -1,0 +1,278 @@
+{
+  "version": 1,
+  "topic": "FreeRTOS 调度器",
+  "slug": "freertos-scheduler",
+  "created": "2026-08-20",
+  "domains": [
+    {
+      "name": "调度基础结构",
+      "slug": "scheduling-foundations",
+      "concepts": [
+        {
+          "name": "任务状态与状态机",
+          "slug": "task-state-machine",
+          "status": "unexplored",
+          "confidence": 0,
+          "practice_count": 0,
+          "explain_count": 0,
+          "last_explained": null,
+          "last_practiced": null,
+          "details": [
+            "Ready / Running / Blocked / Suspended 四种状态",
+            "状态切换触发点：创建、延时、挂起、就绪、被调度",
+            "list.h 中 tskTaskControlBlock 与 ulTaskState 的关系"
+          ]
+        },
+        {
+          "name": "就绪链表与优先级位图",
+          "slug": "ready-lists-priority-bitmap",
+          "status": "unexplored",
+          "confidence": 0,
+          "practice_count": 0,
+          "explain_count": 0,
+          "last_explained": null,
+          "last_practiced": null,
+          "details": [
+            "pxReadyTasksLists[configMAX_PRIORITIES] 数组结构",
+            "uxTopReadyPriority 与优先级位图",
+            "configUSE_PORT_OPTIMISED_TASK_SELECTION 下的位图差异"
+          ]
+        },
+        {
+          "name": "任务优先级语义",
+          "slug": "priority-semantics",
+          "status": "unexplored",
+          "confidence": 0,
+          "practice_count": 0,
+          "explain_count": 0,
+          "last_explained": null,
+          "last_practiced": null,
+          "details": [
+            "数值越大优先级越高（与部分 RTOS 相反）",
+            "configMAX_PRIORITIES = 32 与 CLZ 指令配合",
+            "vTaskPrioritySet / uxTaskPriorityGet"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "调度启动与任务就绪",
+      "slug": "startup-and-ready",
+      "concepts": [
+        {
+          "name": "vTaskStartScheduler 启动流程",
+          "slug": "vtaskstartscheduler-flow",
+          "status": "in_progress",
+          "confidence": 0.4,
+          "practice_count": 0,
+          "explain_count": 1,
+          "last_explained": "2026-08-20",
+          "last_practiced": null,
+          "details": [
+            "创建空闲任务与可选定时器任务的顺序",
+            "prvInitialiseTaskLists 链表初始化",
+            "xPortStartScheduler → prvStartFirstTask 移交控制权"
+          ]
+        },
+        {
+          "name": "任务创建与就绪插入",
+          "slug": "task-create-ready-insert",
+          "status": "unexplored",
+          "confidence": 0,
+          "practice_count": 0,
+          "explain_count": 0,
+          "last_explained": null,
+          "last_practiced": null,
+          "details": [
+            "xTaskCreate → prvInitialiseNewTask → prvAddNewTaskToReadyList 链路",
+            "prvAddTaskToReadyList 宏与位图更新",
+            "对照根目录『各种初始化的流程.md』"
+          ]
+        },
+        {
+          "name": "prvInitialiseNewTask 栈初始化",
+          "slug": "pxstack-init",
+          "status": "unexplored",
+          "confidence": 0,
+          "practice_count": 0,
+          "explain_count": 0,
+          "last_explained": null,
+          "last_practiced": null,
+          "details": [
+            "pxTopOfStack 初值设定（模拟异常压栈）",
+            "栈增长方向与 ARM_CM3 约定",
+            "任务入口 prvPortStartTask/任务包装"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "上下文切换",
+      "slug": "context-switching",
+      "concepts": [
+        {
+          "name": "首次启动切换 (SVC)",
+          "slug": "svc-first-switch",
+          "status": "unexplored",
+          "confidence": 0,
+          "practice_count": 0,
+          "explain_count": 0,
+          "last_explained": null,
+          "last_practiced": null,
+          "details": [
+            "prvStartFirstTask 汇编流程",
+            "vPortSVCHandler / SVC_Handler 挂接点",
+            "User/stm32f10x_it.c 中断向量核对"
+          ]
+        },
+        {
+          "name": "PendSV 上下文切换",
+          "slug": "pendsv-context-switch",
+          "status": "unexplored",
+          "confidence": 0,
+          "practice_count": 0,
+          "explain_count": 0,
+          "last_explained": null,
+          "last_practiced": null,
+          "details": [
+            "xPortPendSVHandler / PendSV_Handler 汇编",
+            "现场保存与恢复（R4-R11、LR、PSP）",
+            "pxCurrentTCB 切换"
+          ]
+        },
+        {
+          "name": "vTaskSwitchContext 任务选择",
+          "slug": "vswitchcontext-selection",
+          "status": "unexplored",
+          "confidence": 0,
+          "practice_count": 0,
+          "explain_count": 0,
+          "last_explained": null,
+          "last_practiced": null,
+          "details": [
+            "taskSELECT_HIGHEST_PRIORITY_TASK 宏",
+            "pxCurrentTCB 更新与就绪链表取头",
+            "同优先级任务轮转的链表尾部插入"
+          ]
+        },
+        {
+          "name": "CLZ 硬件优化选任务",
+          "slug": "clz-task-selection",
+          "status": "unexplored",
+          "confidence": 0,
+          "practice_count": 0,
+          "explain_count": 0,
+          "last_explained": null,
+          "last_practiced": null,
+          "details": [
+            "configUSE_PORT_OPTIMISED_TASK_SELECTION = 1",
+            "uxTopReadyPriority 位图 + __clz 找最高优先级",
+            "与普通循环遍历算法的对比"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "时间片与延时",
+      "slug": "time-slicing-delays",
+      "concepts": [
+        {
+          "name": "SysTick 与时间片轮转",
+          "slug": "systick-time-slicing",
+          "status": "unexplored",
+          "confidence": 0,
+          "practice_count": 0,
+          "explain_count": 0,
+          "last_explained": null,
+          "last_practiced": null,
+          "details": [
+            "xPortSysTickHandler / SysTick_Handler",
+            "configUSE_TIME_SLICING 同优先级轮转",
+            "configTICK_RATE_HZ = 1000 → 1ms 一 tick"
+          ]
+        },
+        {
+          "name": "vTaskDelay 与延时链表",
+          "slug": "vtaskdelay-delayed-lists",
+          "status": "unexplored",
+          "confidence": 0,
+          "practice_count": 0,
+          "explain_count": 0,
+          "last_explained": null,
+          "last_practiced": null,
+          "details": [
+            "prvAddCurrentTaskToDelayedList",
+            "xDelayedTaskList1/2 与溢出延时链表",
+            "pdMS_TO_TICKS 换算"
+          ]
+        },
+        {
+          "name": "xTaskIncrementTick 调度心跳",
+          "slug": "xtaskincrementtick",
+          "status": "unexplored",
+          "confidence": 0,
+          "practice_count": 0,
+          "explain_count": 0,
+          "last_explained": null,
+          "last_practiced": null,
+          "details": [
+            "xTaskIncrementTick 内部逻辑",
+            "延时到期任务迁回就绪链表",
+            "调度器挂起时如何推迟处理"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "调度控制",
+      "slug": "scheduling-control",
+      "concepts": [
+        {
+          "name": "临界区保护",
+          "slug": "critical-sections",
+          "status": "unexplored",
+          "confidence": 0,
+          "practice_count": 0,
+          "explain_count": 0,
+          "last_explained": null,
+          "last_practiced": null,
+          "details": [
+            "taskENTER_CRITICAL / taskEXIT_CRITICAL 宏",
+            "port.c 中 vPortEnterCritical / vPortExitCritical",
+            "configMAX_SYSCALL_INTERRUPT_PRIORITY 阈值"
+          ]
+        },
+        {
+          "name": "调度器挂起与恢复",
+          "slug": "scheduler-suspend-resume",
+          "status": "unexplored",
+          "confidence": 0,
+          "practice_count": 0,
+          "explain_count": 0,
+          "last_explained": null,
+          "last_practiced": null,
+          "details": [
+            "vTaskSuspendAll / xTaskResumeAll",
+            "uxSchedulerSuspended 计数器",
+            "xTaskResumeAll 中的挂起任务处理与任务切换"
+          ]
+        },
+        {
+          "name": "任务挂起与恢复",
+          "slug": "task-suspend-resume",
+          "status": "unexplored",
+          "confidence": 0,
+          "practice_count": 0,
+          "explain_count": 0,
+          "last_explained": null,
+          "last_practiced": null,
+          "details": [
+            "vTaskSuspend / vTaskResume",
+            "xSuspendedTaskList 挂起链表",
+            "与 vTaskSuspendAll 的区别"
+          ]
+        }
+      ]
+    }
+  ]
+}
