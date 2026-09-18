@@ -1,6 +1,6 @@
-# 基于 CMake 和 CubeMX 在 Linux 中开发 STM32
+# 基于 CMake 和 CubeMX 在 Windows/Linux 中开发 STM32
 
-本文介绍一套可复用于多数 STM32 裸机或 HAL 工程的 Linux 开发流程：使用 STM32CubeMX 生成初始化代码，CMake 组织构建，GNU Arm Embedded Toolchain 编译，OpenOCD 配合 ST-Link 烧录和调试。不同型号不能直接共用 CPU/FPU 参数、芯片宏、启动文件、链接脚本或 OpenOCD target 配置。
+本文介绍一套可复用于多数 STM32 裸机或 HAL 工程的 Windows/Linux 开发流程：使用 STM32CubeMX 生成初始化代码，CMake 组织构建，Ninja 调用 GNU Arm Embedded Toolchain 编译，OpenOCD 配合 ST-Link 烧录和调试。Windows 端使用 Git Bash 执行 `.sh` 脚本；PowerShell 不直接解释 Bash 语法。不同型号不能直接共用 CPU/FPU 参数、芯片宏、启动文件、链接脚本或 OpenOCD target 配置。
 
 ## 1. 先理解工具链
 
@@ -9,7 +9,7 @@ CubeMX 生成初始化代码
         ↓
 CMake 读取源码、头文件、编译选项和链接脚本
         ↓
-Make/Ninja 调用 arm-none-eabi-gcc
+Ninja 调用 arm-none-eabi-gcc
         ↓
 ELF（可调试）→ objcopy → BIN/HEX（可烧录）
         ↓
@@ -46,6 +46,38 @@ gdb-multiarch --version
 command -v arm-none-eabi-gcc
 arm-none-eabi-gcc -print-sysroot
 ```
+
+### Windows + Git Bash
+
+Windows 端建议安装 Git for Windows，并在 Git Bash 中执行构建和烧录脚本。需要以下组件：
+
+- Git Bash；
+- CMake 3.22 或更高版本；
+- Ninja；
+- Arm GNU Toolchain 的 `arm-none-eabi` 版本；
+- OpenOCD；
+- ST-Link USB 驱动（实际烧录时需要）。
+
+可以在 PowerShell 中安装常用依赖：
+
+```powershell
+winget install --id Kitware.CMake -e
+winget install --id Ninja-build.Ninja -e
+winget install --id Arm.GnuArmEmbeddedToolchain -e
+winget install --id xpack-dev-tools.openocd-xpack -e
+```
+
+安装器修改 `PATH` 后应重新打开 Git Bash。检查工具是否可用：
+
+```bash
+cmake --version
+ninja --version
+arm-none-eabi-gcc --version
+arm-none-eabi-gcc -print-file-name=nano.specs
+openocd --version
+```
+
+Windows 构建链使用 Windows 版 CMake、Ninja、Arm GNU Toolchain 和 OpenOCD；这些工具可以由 Git Bash 启动。不要再为该脚本安装或配置 `make`，构建生成器已经统一为 Ninja。
 
 ## 3. 用 CubeMX 建立 CMake 工程
 
@@ -132,6 +164,39 @@ cmake --build build/Debug --target clean
 
 工具链、生成器或关键选项改变后，不要复用旧的 `CMakeCache.txt`；改用新的构建目录重新配置，例如 `-B build-gcc`。
 
+如果工程希望使用 `.sh` 统一入口，建议将构建和烧录脚本放在 STM32 工程根目录：
+
+```text
+<repository>/
+└── <project>/
+    ├── build.sh
+    ├── flash.sh
+    ├── CMakeLists.txt
+    └── build/
+        ├── Debug/
+        └── Release/
+```
+
+在 Git Bash 中从仓库根目录执行（脚本名称可按工程约定调整）：
+
+```bash
+./<project>/build.sh                 # 默认 Debug
+./<project>/build.sh Release
+./<project>/build.sh Debug --clean --jobs 8
+./<project>/flash.sh Debug --no-build --dry-run
+./<project>/flash.sh                 # 构建后烧录
+```
+
+也可以先进入 STM32 工程根目录再执行：
+
+```bash
+cd <project>
+./build.sh
+./flash.sh
+```
+
+构建脚本使用 `-G Ninja`，并检查 `ninja`、`arm-none-eabi-gcc/g++/objcopy/size` 等命令。Debug/Release 产物分别位于 `<project>/build/Debug/` 和 `<project>/build/Release/`。
+
 ### 方式 B：使用工程预设
 
 若 CubeMX 生成了 `CMakePresets.json`，通常可直接使用 `Debug` 或 `Release` 预设：
@@ -146,7 +211,7 @@ cmake --build --preset Debug
 
 ## 6. 连接 ST-Link 并烧录
 
-连接 `SWDIO`、`SWCLK`、`GND`、目标电压参考 `VTref/3.3V`，建议同时连接 `NRST`；确认目标板供电与接线后再操作。先用 `lsusb` 确认 Linux 能看到 ST-Link。
+连接 `SWDIO`、`SWCLK`、`GND`、目标电压参考 `VTref/3.3V`，建议同时连接 `NRST`；确认目标板供电与接线后再操作。Linux 可用 `lsusb` 确认 ST-Link；Windows Git Bash 没有 `lsusb` 时，以 OpenOCD 输出或 Windows 设备管理器确认。
 
 Ubuntu 的 OpenOCD 软件包通常会安装 udev 规则。若普通用户无 USB 权限，可把当前用户加入 `plugdev`，重新加载规则后注销并重新登录，再重新插拔 ST-Link：
 
@@ -170,6 +235,8 @@ openocd -f interface/stlink.cfg -f target/<stm32-family>.cfg \
   -c "adapter speed 1000" \
   -c "program {build/Debug/<target>.elf} verify reset exit"
 ```
+
+Git Bash 下 Windows 路径通常显示为 `/c/Users/...`，但 Windows 版 OpenOCD 需要 `C:/Users/...` 形式。通用烧录脚本应先通过 `uname -s` 判断系统：在 `MINGW/MSYS/CYGWIN` 下使用 `cygpath -m` 转换为 Windows 路径，在 Linux 下保持原生路径。不要在脚本中写死用户名或绝对工程路径。
 
 `verify` 回读校验，`reset` 让 MCU 重新运行，`exit` 在完成后退出。烧录前必须检查目标型号、供电、接线和产物路径。连接不稳定时可降低 `adapter speed`。
 
@@ -213,6 +280,8 @@ VS Code 可安装 Cortex-Debug。配置时至少核对 ELF 路径、OpenOCD targ
 | 现象 | 原因与处理 |
 | --- | --- |
 | 找不到 `arm-none-eabi-gcc` | 工具链未安装或 `PATH` 未生效；检查 `command -v`。 |
+| PowerShell 无法直接运行 `.sh` | `.sh` 是 Bash 脚本；请在 Git Bash 中运行，或从 PowerShell 显式调用 Git Bash。 |
+| OpenOCD 能识别 ST-Link 但打不开 ELF | 检查 Git Bash 的 `/c/...` 与 Windows OpenOCD 的 `C:/...` 路径格式；脚本应使用 `cygpath -m` 转换。 |
 | 找不到 `nano.specs` | Newlib 未安装，或 GCC 与库来自不同工具链；安装 `libnewlib-arm-none-eabi` 并统一路径。 |
 | CMake 报生成器不一致 | 旧构建目录缓存了 Make/Ninja；换一个全新的 `-B` 目录。 |
 | `undefined reference` | 检查源码是否加入 `target_sources()`、函数签名是否一致，以及 HAL/启动文件是否完整。 |
